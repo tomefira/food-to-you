@@ -15,7 +15,7 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main className="mx-12">
+    <main>
       {/* Navbar */}
       <div className="flex items-center justify-between py-4 px-6 mx-auto my-5 max-w-7xl">
         <div>
@@ -122,7 +122,11 @@ export default function Home() {
         </div>
       </div>
       {/* Footer */}
-      <footer className="footer p-10 bg-neutral text-neutral-content">
+      <footer className="footer p-10 bg-black text-white pl-24">
+        <aside>
+          <p className='w-50 h-50'>🎒</p>
+          <p>Food-To-You Ltd.<br/>Delivering food to Australia since 2024.</p>
+        </aside> 
         <nav>
           <h6 className="footer-title">Services</h6> 
           <a className="link link-hover">Branding</a>
