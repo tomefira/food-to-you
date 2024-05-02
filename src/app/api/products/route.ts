@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   const data = await request.json();
@@ -16,7 +18,10 @@ export async function POST(request: Request) {
     });
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: 'Error creating product' }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
@@ -25,6 +30,9 @@ export async function GET() {
     const products = await prisma.product.findMany();
     return NextResponse.json(products, { status: 200 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: 'Error fetching products' }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
