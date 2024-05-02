@@ -19,3 +19,73 @@ model User {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model Customer {
+  id         String   @id @default(uuid())
+  customerID String   @unique
+  firstName  String
+  lastName   String
+  address    String
+  orders     Order[]
+  mobileNum  String
+}
+
+model Driver {
+  id        String @id @default(uuid())
+  driverId  String @unique
+  firstName String
+  lastName  String
+  mobileNum String
+  orders    Order[]
+}
+
+model Order {
+  id              String   @id @default(uuid())
+  orderID         String   @unique
+  resturantID     String
+  customerID      String
+  driverID        String
+  productIDArray  String[]
+  orderDateTime   DateTime
+  deliveryAddress String
+  orderStatus     OrderStatus @default(pending)
+  deliveryStatus  DeliveryStatus @default(awaitingOrder)
+  totalCost       Float
+
+  customer        Customer   @relation(fields: [customerID], references: [id])
+  driver          Driver     @relation(fields: [driverID], references: [id])
+  restaurant      Restaurant @relation(fields: [resturantID], references: [id])
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  productID   String  @unique
+  productName String
+  productCost Float
+  resturantID String
+
+  restaurant  Restaurant @relation(fields: [resturantID], references: [id])
+}
+
+model Restaurant {
+  id        String   @id @default(uuid())
+  name      String
+  orders    Order[]
+  products  Product[]
+}
+
+enum OrderStatus {
+  pending
+  awaitingPayment
+  paid
+  submitted
+  accepted
+  completed
+  cancelled
+}
+
+enum DeliveryStatus {
+  awaitingOrder
+  driving
+  delivered
+}
