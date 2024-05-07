@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const { productID, productName, productCost, resturantID } = data;
+  const { productID, productName, productCost, restaurantID } = data;
 
   try {
     const product = await prisma.product.create({
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
         productID,
         productName,
         productCost,
-        resturantID,
+        restaurantID,
       },
     });
     return NextResponse.json(product, { status: 201 });

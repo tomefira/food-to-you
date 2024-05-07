@@ -51,8 +51,12 @@ export default function Home() {
           </NavigationMenu>
         </div>
         <div className="space-x-3">
-          <Button variant="outline" className="px-4 py-2 rounded text-sm font-medium">Log in</Button>
-          <Button className="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white">Sign up</Button>
+          <Button asChild variant="outline" className="px-4 py-2 rounded text-sm font-medium">
+            <Link href="/login">Log in</Link>
+          </Button>
+          <Button asChild className="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white">
+            <Link href="/signup">Sign up</Link>
+          </Button>
         </div>
       </div>
       {/* Hero Section */}
