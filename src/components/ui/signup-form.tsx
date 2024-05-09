@@ -9,10 +9,13 @@ import { useState } from 'react'
 
 export const SignupForm = () => {
   const router = useRouter()
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [mobileNum, setMobileNum] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [address, setAddress] = useState('')
   const [error, setError] = useState('')
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -27,7 +30,7 @@ export const SignupForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ firstName, lastName, mobileNum, email, password, address }),
       })
 
       const data = await res.json()
@@ -44,13 +47,35 @@ export const SignupForm = () => {
   return (
     <form onSubmit={onSubmit} className="space-y-12 w-full sm:w-[400px]">
       <div className="grid w-full items-center gap-1.5">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="firstName">First Name</Label>
         <Input
           className="w-full"
           required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          id="name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          id="firstName"
+          type="text"
+        />
+      </div>
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="lastName">Last Name</Label>
+        <Input
+          className="w-full"
+          required
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          id="lastName"
+          type="text"
+        />
+      </div>
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="mobileNum">Mobile Number</Label>
+        <Input
+          className="w-full"
+          required
+          value={mobileNum}
+          onChange={(e) => setMobileNum(e.target.value)}
+          id="mobileNum"
           type="text"
         />
       </div>
@@ -85,6 +110,17 @@ export const SignupForm = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           id="confirmPassword"
           type="password"
+        />
+      </div>
+      <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor="address">Address</Label>
+        <Input
+          className="w-full"
+          required
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          id="address"
+          type="text"
         />
       </div>
       {error && <Alert>{error}</Alert>}
