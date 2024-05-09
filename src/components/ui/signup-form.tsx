@@ -36,7 +36,7 @@ export const SignupForm = () => {
 
       const data = await res.json()
       if (res.ok) {
-        router.push('/login')
+        router.push('/dashboard/business/')
       } else {
         setError(data.message || 'Something went wrong')
       }

@@ -4,7 +4,6 @@ import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -19,19 +18,30 @@ export const LoginForm = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-        callbackUrl
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       })
-      console.log('Res', res)
-      if (!res?.error) {
-        router.push(callbackUrl)
+      
+      const data = await res.json()
+      
+      if (res.ok) {
+        if (data.role === 'restaurant') {
+          router.push('/dashboard/business')
+        } else if (data.role === 'customer') {
+          router.push('/dashboard/customer')
+        } else {
+          router.push('/dashboard')
+        }
       } else {
-        setError('Invalid email or password')
+        setError(data.error || 'Invalid email or password')
       }
-    } catch (err: any) {}
+    } catch (err: any) {
+      setError('An error occurred. Please try again.')
+    }
   }
 
   return (
