@@ -21,6 +21,12 @@ import {
     MoreVertical,
     Pizza,
     Plus,
+    ChefHat,
+    BadgeInfo,
+    History,
+    BadgeHelp,
+    Home,
+    UtensilsCrossed,
     Settings,
     SunMedium,
     Trash,
@@ -28,7 +34,9 @@ import {
     User,
     User2Icon,
     UserX2Icon,
-    X
+    X,
+    ConciergeBell,
+    BarChartHorizontal,
   } from 'lucide-react';
   
   export type Icon = LucideIcon;
@@ -60,6 +68,14 @@ import {
     sun: SunMedium,
     moon: Moon,
     laptop: Laptop,
+    chefhat: ChefHat,
+    badgeinfo: BadgeInfo,
+    history: History,
+    badgehelp: BadgeHelp,
+    home: Home,
+    utensilscrossed: UtensilsCrossed,
+    conciergebell: ConciergeBell,
+    barchart: BarChartHorizontal,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"

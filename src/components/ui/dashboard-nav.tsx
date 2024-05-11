@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { create } from 'zustand';
+import { useSidebar } from '@/lib/hooks';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
+import { NavItem } from '@/lib/types';
 import {
   Tooltip,
   TooltipContent,
@@ -13,25 +14,10 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 
-export interface NavItem {
-    title: string;
-    href?: string;
-    disabled?: boolean;
-    external?: boolean;
-    icon?: keyof typeof Icons;
-    label?: string;
-    description?: string;
-  }
-
 interface SidebarStore {
   isMinimized: boolean;
   toggle: () => void;
 }
-
-export const useSidebar = create<SidebarStore>((set) => ({
-  isMinimized: false,
-  toggle: () => set((state) => ({ isMinimized: !state.isMinimized }))
-}));
 
 interface DashboardNavProps {
   items: NavItem[];

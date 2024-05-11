@@ -1,20 +1,51 @@
-"use client"
+'use client';
+import React, { useState } from 'react';
+import { DashboardNav } from '@/components/ui/dashboard-nav';
+import { customerNavItems, restaurantNavItems } from '@/lib/data';
+import { cn } from '@/lib/utils';
+import { ChevronLeft } from 'lucide-react';
+import { useSidebar } from '@/lib/hooks';
 
-import * as React from "react";
-import Link from "next/link";
+type SidebarProps = {
+  className?: string;
+  userType: 'customer' | 'business'; // Add userType prop
+};
 
-export default function Sidebar() {
-  const [open, setOpen] = React.useState(false);
+export default function Sidebar({ className, userType }: SidebarProps) {
+  const { isMinimized, toggle } = useSidebar();
+  const [status, setStatus] = useState(false);
+
+  const handleToggle = () => {
+    setStatus(true);
+    toggle();
+    setTimeout(() => setStatus(false), 500);
+  };
+
+  const navItems = userType === 'customer' ? customerNavItems : restaurantNavItems;
 
   return (
-    <div className="flex">
-      <div className="flex flex-col h-screen p-3 w-60 bg-white shadow-lg">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-black p-4"><span className="text-red-600 bg-red-100 px-2 py-1 rounded-md">Food-To-You</span></h2>
+    <nav
+      className={cn(
+        `relative hidden h-screen border-r pt-20 md:block`,
+        status && 'duration-500',
+        !isMinimized ? 'w-72' : 'w-[72px]',
+        className
+      )}
+    >
+      <ChevronLeft
+        className={cn(
+          'absolute -right-3 top-20 cursor-pointer rounded-full border bg-background text-3xl text-foreground',
+          !isMinimized && 'rotate-180'
+        )}
+        onClick={handleToggle}
+      />
+      <div className="space-y-4 py-4">
+        <div className="px-3 py-2">
+          <div className="mt-3 space-y-1">
+            <DashboardNav items={navItems} />
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }

@@ -3,8 +3,8 @@ import Sidebar from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Business Dashboard Page',
-  description: 'Business Dashboard Page'
+  title: 'Customer Dashboard Page',
+  description: 'Customer Dashboard Page'
 };
 
 export default function DashboardLayout({
@@ -16,7 +16,7 @@ export default function DashboardLayout({
     <>
       <Header />
       <div className="flex h-screen overflow-hidden">
-        <Sidebar userType='business' />
+        <Sidebar userType='customer' />
         <main className="w-full pt-16">{children}</main>
       </div>
     </>
