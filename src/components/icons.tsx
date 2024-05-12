@@ -37,6 +37,8 @@ import {
     X,
     ConciergeBell,
     BarChartHorizontal,
+    SearchIcon,
+    Loader,
   } from 'lucide-react';
   
   export type Icon = LucideIcon;
@@ -76,6 +78,8 @@ import {
     utensilscrossed: UtensilsCrossed,
     conciergebell: ConciergeBell,
     barchart: BarChartHorizontal,
+    searchicon: SearchIcon,
+    loader: Loader,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"
