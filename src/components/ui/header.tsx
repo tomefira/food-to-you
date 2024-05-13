@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
+import { Icons } from '../icons';
 
 export default function Header() {
   return (

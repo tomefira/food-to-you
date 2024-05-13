@@ -1,4 +1,5 @@
-import { Icons } from '@/components/icons';
+import { Icons } from "@/components/icons";
+import { Product } from "@prisma/client";
 
 export interface NavItem {
   title: string;
@@ -30,3 +31,8 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
