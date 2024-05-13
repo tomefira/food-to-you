@@ -39,6 +39,7 @@ import {
     BarChartHorizontal,
     SearchIcon,
     Loader,
+    ShoppingCart,
   } from 'lucide-react';
   
   export type Icon = LucideIcon;
@@ -80,6 +81,7 @@ import {
     barchart: BarChartHorizontal,
     searchicon: SearchIcon,
     loader: Loader,
+    shoppingcart: ShoppingCart,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"

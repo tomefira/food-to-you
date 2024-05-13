@@ -8,24 +8,25 @@ generator client {
 }
 
 model Customer {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
   password      String
   address       String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
   firstName     String
   lastName      String
   mobileNum     String
   orders        Order[]
+  cart          Cart?
 }
 
 model Restaurant {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String
-  email         String   @unique
+  email         String    @unique
   password      String
   address       String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
   products      Product[]
   orders        Order[]
 }
@@ -38,12 +39,12 @@ model Order {
   productIDs      String[]
   orderDateTime   DateTime
   deliveryAddress String
-  orderStatus     OrderStatus @default(pending)
-  deliveryStatus  DeliveryStatus @default(awaitingOrder)
+  orderStatus     OrderStatus  @default(pending)
+  deliveryStatus  DeliveryStatus  @default(awaitingOrder)
   totalCost       Float
 
-  customer        Customer @relation(fields: [customerID], references: [id])
-  restaurant      Restaurant @relation(fields: [restaurantID], references: [id])
+  customer        Customer  @relation(fields: [customerID], references: [id])
+  restaurant      Restaurant  @relation(fields: [restaurantID], references: [id])
 }
 
 model Product {
@@ -53,7 +54,16 @@ model Product {
   productCost   Float
   restaurantID  Int
 
-  restaurant    Restaurant @relation(fields: [restaurantID], references: [id])
+  restaurant    Restaurant  @relation(fields: [restaurantID], references: [id])
+  carts         Cart[]  @relation("CartProducts")
+}
+
+model Cart {
+  id            Int       @id @default(autoincrement())
+  customerID    Int       @unique
+  products      Product[] @relation("CartProducts")
+
+  customer      Customer  @relation(fields: [customerID], references: [id])
 }
 
 enum OrderStatus {
