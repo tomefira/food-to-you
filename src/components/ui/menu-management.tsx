@@ -2,12 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 
+interface MenuItem {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+}
+
 const MenuManagement: React.FC = () => {
-  const [menuItems, setMenuItems] = useState([]);
-  const [newItem, setNewItem] = useState({
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]); // Specify type for menuItems
+  const [newItem, setNewItem] = useState<MenuItem>({
+    id: 0, // Assuming id is number
     name: '',
     description: '',
-    price: '',
+    price: 0, // Assuming price is number
     category: 'appetizer',
   });
 
@@ -30,11 +39,11 @@ const MenuManagement: React.FC = () => {
     const response = await fetch('/api/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newItem, price: parseFloat(newItem.price) }),
+      body: JSON.stringify({ ...newItem}),
     });
-    const data = await response.json();
+    const data: MenuItem = await response.json(); // Specify type for data
     setMenuItems([...menuItems, data]);
-    setNewItem({ name: '', description: '', price: '', category: 'appetizer' });
+    setNewItem({ id: 0, name: '', description: '', price: 0, category: 'appetizer' }); // Reset newItem
   };
 
   const handleDeleteItem = async (id: number) => {
