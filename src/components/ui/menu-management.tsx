@@ -3,21 +3,21 @@
 import React, { useState, useEffect } from 'react';
 
 interface MenuItem {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
+  id: string;
+  productID: string;
+  productName: string;
+  productCost: number;
+  restaurantID: string;
 }
 
 const MenuManagement: React.FC = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]); // Specify type for menuItems
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState<MenuItem>({
-    id: 0, // Assuming id is number
-    name: '',
-    description: '',
-    price: 0, // Assuming price is number
-    category: 'appetizer',
+    id: '', // Assuming id is a string
+    productID: '',
+    productName: '',
+    productCost: 0, // Assuming productCost is a number
+    restaurantID: '',
   });
 
   useEffect(() => {
@@ -31,7 +31,8 @@ const MenuManagement: React.FC = () => {
 
   const handleNewItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setNewItem({ ...newItem, [name]: value });
+    const newValue = name === 'productCost' ? parseFloat(value) : value;
+    setNewItem({ ...newItem, [name]: newValue });
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
@@ -39,14 +40,14 @@ const MenuManagement: React.FC = () => {
     const response = await fetch('/api/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newItem}),
+      body: JSON.stringify(newItem),
     });
-    const data: MenuItem = await response.json(); // Specify type for data
+    const data: MenuItem = await response.json();
     setMenuItems([...menuItems, data]);
-    setNewItem({ id: 0, name: '', description: '', price: 0, category: 'appetizer' }); // Reset newItem
+    setNewItem({ id: '', productID: '', productName: '', productCost: 0, restaurantID: '' });
   };
 
-  const handleDeleteItem = async (id: number) => {
+  const handleDeleteItem = async (id: string) => {
     const response = await fetch(`/api/products?id=${id}`, {
       method: 'DELETE',
     });
@@ -54,6 +55,7 @@ const MenuManagement: React.FC = () => {
       setMenuItems(menuItems.filter(item => item.id !== id));
     }
   };
+  
 
   return (
     <div>
@@ -62,7 +64,7 @@ const MenuManagement: React.FC = () => {
         {menuItems.map(item => (
           <li key={item.id} className="mb-2 flex justify-between">
             <div>
-              {item.name} - ${item.price} ({item.category})
+              {item.productName} - ${item.productCost}
             </div>
             <div>
               <button onClick={() => handleDeleteItem(item.id)} className="text-red-500">Delete</button>
@@ -74,47 +76,24 @@ const MenuManagement: React.FC = () => {
       <form onSubmit={handleAddItem} className="mt-4">
         <h2 className="text-xl font-bold mb-4">Add New Menu Item</h2>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Item Name</label>
+          <label className="block text-sm font-medium text-gray-700">Product Name</label>
           <input
             type="text"
-            name="name"
-            value={newItem.name}
+            name="productName"
+            value={newItem.productName}
             onChange={handleNewItemChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Description</label>
+          <label className="block text-sm font-medium text-gray-700">Product Cost</label>
           <input
             type="text"
-            name="description"
-            value={newItem.description}
+            name="productCost"
+            value={newItem.productCost}
             onChange={handleNewItemChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Price</label>
-          <input
-            type="text"
-            name="price"
-            value={newItem.price}
-            onChange={handleNewItemChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Category</label>
-          <select
-            name="category"
-            value={newItem.category}
-            onChange={handleNewItemChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-          >
-            <option value="appetizer">Appetizer</option>
-            <option value="entree">Entree</option>
-            <option value="dessert">Dessert</option>
-          </select>
         </div>
         <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
           Add Item
