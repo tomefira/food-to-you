@@ -7,17 +7,17 @@ interface MenuItem {
   productID: string;
   productName: string;
   productCost: number;
-  restaurantID: string;
+  restaurant: { id: string; name: string }; // Restaurant field added
 }
 
 const MenuManagement: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState<MenuItem>({
-    id: '', // Assuming id is a string
+    id: '',
     productID: '',
     productName: '',
-    productCost: 0, // Assuming productCost is a number
-    restaurantID: '',
+    productCost: 0,
+    restaurant: { id: '', name: '' }, // Initialize restaurant with empty values
   });
 
   useEffect(() => {
@@ -32,7 +32,10 @@ const MenuManagement: React.FC = () => {
   const handleNewItemChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     const newValue = name === 'productCost' ? parseFloat(value) : value;
-    setNewItem({ ...newItem, [name]: newValue });
+    setNewItem(prevState => ({
+      ...prevState,
+      [name]: name === 'restaurantName' ? { ...prevState.restaurant, name: value } : newValue,
+    }));
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
@@ -44,7 +47,7 @@ const MenuManagement: React.FC = () => {
     });
     const data: MenuItem = await response.json();
     setMenuItems([...menuItems, data]);
-    setNewItem({ id: '', productID: '', productName: '', productCost: 0, restaurantID: '' });
+    setNewItem({ id: '', productID: '', productName: '', productCost: 0, restaurant: { id: '', name: '' } });
   };
 
   const handleDeleteItem = async (id: string) => {
@@ -55,7 +58,6 @@ const MenuManagement: React.FC = () => {
       setMenuItems(menuItems.filter(item => item.id !== id));
     }
   };
-  
 
   return (
     <div>
@@ -64,7 +66,7 @@ const MenuManagement: React.FC = () => {
         {menuItems.map(item => (
           <li key={item.id} className="mb-2 flex justify-between">
             <div>
-              {item.productName} - ${item.productCost}
+              {item.productName} - ${item.productCost} ({item.restaurant.name})
             </div>
             <div>
               <button onClick={() => handleDeleteItem(item.id)} className="text-red-500">Delete</button>
@@ -91,6 +93,16 @@ const MenuManagement: React.FC = () => {
             type="text"
             name="productCost"
             value={newItem.productCost}
+            onChange={handleNewItemChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Restaurant Name</label>
+          <input
+            type="text"
+            name="restaurantName"
+            value={newItem.restaurant.name}
             onChange={handleNewItemChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
           />
