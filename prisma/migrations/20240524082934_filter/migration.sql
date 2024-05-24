@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Restaurant" ADD COLUMN     "distance" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "rating" INTEGER NOT NULL DEFAULT 1;
