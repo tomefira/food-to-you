@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   const data = await request.json();
   const {
     orderID,
-    resturantID,
+    restaurantID,
     customerID,
     driverID,
     productIDArray,
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const order = await prisma.order.create({
       data: {
         orderID,
-        resturantID,
+        restaurantID,
         customerID,
         driverID,
         productIDArray,
