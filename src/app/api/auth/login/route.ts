@@ -19,7 +19,18 @@ export async function POST(req: NextRequest) {
     })
 
     if (customer && await bcrypt.compare(password, customer.password)) {
-      return NextResponse.json({ role: 'customer' })
+      const user = { id: customer.id.toString(), name: customer.firstName };
+      const response = NextResponse.json({user, role: 'customer'});
+
+      response.cookies.set('userId', user.id, {
+        path: '/',
+        httpOnly: true,
+        secure: true, // Set this to false for local development
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
+      
+      return response;
     }
 
     return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
