@@ -37,12 +37,17 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Handler for GET requests (fetch all users)
+
 export async function GET(req: NextRequest) {
-  try {
-    const users = await prisma.customer.findMany();
-    return NextResponse.json(users, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+  const userId = req.cookies.get('userId')?.value;
+  let uid = Number(userId);
+
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // Retrieve user data from your data source based on the userId
+  const userData = await prisma.customer.findUnique({ where: { id: uid}} )
+
+  return NextResponse.json(userData);
 }

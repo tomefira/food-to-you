@@ -29,9 +29,37 @@ const products = [
   { name: "Coq au Vin", category: "French", rating: 4 },
 ];
 
+
+
 const CustomerDashboard = () => {
   const [distance, setDistance] = useState(25);
   const [rating, setRating] = useState(3);
+
+  const [customerData, setCustomerData] = useState(null);
+
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      try {
+        const response = await fetch('/api/customers', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies in the request
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCustomerData(data);
+        } else {
+          console.error('Failed to fetch customer data');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchCustomerData();
+  }, []);
 
   return (
     <div className="p-6">
