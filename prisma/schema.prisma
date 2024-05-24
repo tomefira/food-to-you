@@ -21,14 +21,14 @@ model Customer {
 }
 
 model Restaurant {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String    @unique
-  password      String
-  address       String
-  createdAt     DateTime  @default(now())
-  products      Product[]
-  orders        Order[]
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String    @unique
+  password       String
+  address        String
+  createdAt      DateTime  @default(now())
+  products       Product[]
+  orders         Order[]
 }
 
 model Order {
@@ -40,8 +40,10 @@ model Order {
   orderDateTime   DateTime
   deliveryAddress String
   orderStatus     OrderStatus  @default(pending)
-  deliveryStatus  DeliveryStatus  @default(awaitingOrder)
+  deliveryStatus  DeliveryStatus  @default(preparing)
   totalCost       Float
+  isCompleted     Boolean  @default(false)
+  completedAt     DateTime?
 
   customer        Customer  @relation(fields: [customerID], references: [id])
   restaurant      Restaurant  @relation(fields: [restaurantID], references: [id])
@@ -68,16 +70,13 @@ model Cart {
 
 enum OrderStatus {
   pending
-  awaitingPayment
-  paid
-  submitted
   accepted
+  rejected
   completed
-  cancelled
 }
 
 enum DeliveryStatus {
-  awaitingOrder
+  preparing
   driving
   delivered
 }

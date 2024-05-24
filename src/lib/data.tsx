@@ -31,23 +31,18 @@ export const customerNavItems: NavItem[] = [
 
 export const restaurantNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
-    icon: 'home',
-  },
-  {
-    title: 'Manage Menu',
-    href: '/menu',
-    icon: 'utensilscrossed',
-  },
-  {
     title: 'Orders',
-    href: '/orders',
+    href: '/dashboard/business',
     icon: 'conciergebell',
   },
   {
+    title: 'Menu',
+    href: '/dashboard/business/menu',
+    icon: 'utensilscrossed',
+  },
+  {
     title: 'Revenue Reports',
-    href: '/reports',
+    href: '/dashboard/business/revenue',
     icon: 'barchart',
   },
   {
