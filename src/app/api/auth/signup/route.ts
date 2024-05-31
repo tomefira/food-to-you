@@ -1,37 +1,35 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcrypt'
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
-const prisma = new PrismaClient()
+interface CreateUserParams {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  mobileNum: string;
+  address: string;
+}
 
-export async function POST(req: NextRequest) {
-  const { firstName, lastName, mobileNum, email, password, address } = await req.json()
+async function createUser({ email, password, firstName, lastName, mobileNum, address }: CreateUserParams) {
+  const user = await prisma.customer.create({
+    data: {
+      email,
+      password,
+      firstName,
+      lastName,
+      mobileNum,
+      address,
+    },
+  });
+  return user;
+}
 
+export async function POST(request: NextRequest) {
   try {
-    // Check if the user already exists
-    const existingUser = await prisma.customer.findUnique({ where: { email } })
-
-    if (existingUser) {
-      return NextResponse.json({ message: 'User already exists' }, { status: 400 })
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    // Create new user
-    const user = await prisma.customer.create({
-      data: {
-        firstName,
-        lastName,
-        mobileNum,
-        email,
-        password: hashedPassword,
-        address,
-      },
-    })
-
-    return NextResponse.json(user, { status: 201 })
+    const body = await request.json();
+    const user = await createUser(body);
+    return NextResponse.json(user);
   } catch (error) {
-    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 })
+    return NextResponse.json({ error: 'User registration failed' }, { status: 500 });
   }
 }

@@ -18,12 +18,16 @@ export const SignupForm = () => {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [zip, setZip] = useState('')
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
     const address = `${street}, ${city}, ${state}, ${zip}`
     try {
       const res = await fetch('/api/auth/signup', {
@@ -71,7 +75,7 @@ export const SignupForm = () => {
               type="text"
             />
           </div>
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="mobileNum">Mobile Number</Label>
             <Input
               className="w-full"
@@ -82,7 +86,7 @@ export const SignupForm = () => {
               type="text"
             />
           </div>
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
               className="w-full"
@@ -95,10 +99,10 @@ export const SignupForm = () => {
           </div>
         </div>
         <div className="space-y-6">
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="street">Street Address</Label>
             <Input
-              className="w-full"
+              className="w/full"
               required
               value={street}
               onChange={(e) => setStreet(e.target.value)}
@@ -106,10 +110,10 @@ export const SignupForm = () => {
               type="text"
             />
           </div>
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="city">City</Label>
             <Input
-              className="w-full"
+              className="w/full"
               required
               value={city}
               onChange={(e) => setCity(e.target.value)}
@@ -117,10 +121,10 @@ export const SignupForm = () => {
               type="text"
             />
           </div>
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="state">State</Label>
             <Input
-              className="w-full"
+              className="w/full"
               required
               value={state}
               onChange={(e) => setState(e.target.value)}
@@ -128,10 +132,10 @@ export const SignupForm = () => {
               type="text"
             />
           </div>
-          <div className="grid w-full items-center gap-1.5">
+          <div className="grid w/full items-center gap-1.5">
             <Label htmlFor="zip">Postcode</Label>
             <Input
-              className="w-full"
+              className="w/full"
               required
               value={zip}
               onChange={(e) => setZip(e.target.value)}
@@ -143,10 +147,10 @@ export const SignupForm = () => {
       </div>
       <Separator/>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="grid w-full items-center gap-1.5">
+        <div className="grid w/full items-center gap-1.5">
           <Label htmlFor="password">Password</Label>
           <Input
-            className="w-full"
+            className="w/full"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -154,10 +158,10 @@ export const SignupForm = () => {
             type="password"
           />
         </div>
-        <div className="grid w-full items-center gap-1.5">
+        <div className="grid w/full items-center gap-1.5">
           <Label htmlFor="confirmPassword">Confirm Password</Label>
           <Input
-            className="w-full"
+            className="w/full"
             required
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -166,8 +170,8 @@ export const SignupForm = () => {
           />
         </div>
       </div>
-      <div className="w-full">
-        <Button className="w-full" size="lg">
+      <div className="w/full">
+        <Button className="w/full" size="lg">
           Signup
         </Button>
       </div>
