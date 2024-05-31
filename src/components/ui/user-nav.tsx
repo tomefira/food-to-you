@@ -13,9 +13,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
-export function UserNav() {
 
-  const [customerData, setCustomerData] = useState(null);
+interface CustomerData {
+  firstName: string;
+  lastName: string;
+}
+
+export function UserNav() {
+  const [customerData, setCustomerData] = useState<CustomerData | null>(null);
 
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -28,7 +33,7 @@ export function UserNav() {
         });
 
         if (response.ok) {
-          const data = await response.json();
+          const data: CustomerData = await response.json();
           setCustomerData(data);
         } else {
           console.error('Failed to fetch customer data');
@@ -41,40 +46,38 @@ export function UserNav() {
     fetchCustomerData();
   }, []);
 
-
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-              />
-              <AvatarFallback>Joe</AvatarFallback>
-            </Avatar>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">
-                {customerData?.firstName}
-              </p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {customerData?.firstName} + {customerData?.lastName}
-              </p>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-            <DropdownMenuItem>
-                Settings
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
-            Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
+            <AvatarImage />
+            <AvatarFallback>Joe</AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">
+              {customerData?.firstName}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {customerData?.firstName} {customerData?.lastName}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          Settings
+          <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => signOut()}>
+          Log out
+          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

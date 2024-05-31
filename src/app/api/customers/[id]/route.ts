@@ -3,12 +3,22 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Helper function to extract userId from headers
+const getUserIdFromHeaders = (req: NextRequest): number | null => {
+  const userIdHeader = req.headers.get('userId');
+  return userIdHeader ? parseInt(userIdHeader) : null;
+}
+
 // Handler for GET requests (fetch a user by ID)
 export async function GET(req: NextRequest) {
-  const { id } = await req.json();
+  const userId = getUserIdFromHeaders(req);
+
+  if (!userId) {
+    return NextResponse.json({ message: 'User ID not found in headers' }, { status: 400 });
+  }
 
   try {
-    const user = await prisma.customer.findUnique({ where: { id: parseInt(id) } });
+    const user = await prisma.customer.findUnique({ where: { id: userId } });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -22,12 +32,17 @@ export async function GET(req: NextRequest) {
 
 // Handler for PUT requests (update a user by ID)
 export async function PUT(req: NextRequest) {
-  const { id } = await req.json();
+  const userId = getUserIdFromHeaders(req);
+
+  if (!userId) {
+    return NextResponse.json({ message: 'User ID not found in headers' }, { status: 400 });
+  }
+
   const { firstName, lastName, mobileNum, email, address } = await req.json();
 
   try {
     const user = await prisma.customer.update({
-      where: { id: parseInt(id) },
+      where: { id: userId },
       data: { firstName, lastName, mobileNum, email, address },
     });
 
@@ -39,10 +54,14 @@ export async function PUT(req: NextRequest) {
 
 // Handler for DELETE requests (delete a user by ID)
 export async function DELETE(req: NextRequest) {
-  const { id } = await req.json();
+  const userId = getUserIdFromHeaders(req);
+
+  if (!userId) {
+    return NextResponse.json({ message: 'User ID not found in headers' }, { status: 400 });
+  }
 
   try {
-    await prisma.customer.delete({ where: { id: parseInt(id) } });
+    await prisma.customer.delete({ where: { id: userId } });
     return NextResponse.json({ message: 'User deleted' }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
