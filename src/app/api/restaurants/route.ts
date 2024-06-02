@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../../../lib/prisma';
 
 export async function POST(request: Request) {
   const data = await request.json();
@@ -17,8 +15,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Error creating restaurant' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -29,7 +25,5 @@ export async function GET() {
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Error fetching restaurants' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
